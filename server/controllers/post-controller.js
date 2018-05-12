@@ -56,4 +56,21 @@ module.exports = (socket) => {
         });
     });
 
+    socket.on('search-post', (filterData) => {
+        postCollection
+        .getLimitedResults()
+        .then((response) => {
+            socket.emit('post-results-fetched', {
+                success: true,
+                data: response
+            });
+        })
+        .catch((err) => {
+            socket.emit('post-results-fetched', {
+                success: false,
+                data: err
+            });
+        });
+    });
+
 };
