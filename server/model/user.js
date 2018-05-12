@@ -7,7 +7,7 @@ const UserSchema = {
     emailID: { type: String, required: true, trim: true },
     mobile: { type: Number, required: true, trim: true },
     password: { type: String, required: true, trim: true },
-    ID: { type: Number, required: true, trim: true }
+    ID: { type: Number, required: false, trim: true }
 }
 
 module.exports = mongoose.Schema(UserSchema);

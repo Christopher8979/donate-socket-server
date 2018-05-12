@@ -21,13 +21,16 @@ class Server {
 }
 
 const DummyController = require('./services/dummy-service.js');
+const UserController = require('./controllers/user-controller.js');
 
 const userDisconnected = () => {
     console.log("user Disconnected");
 };
 
 const onUserConnected = socket => {
-
+    
+    UserController(socket);
+    
     socket.on("fetch-items", function (userDetails) {
 
         // User details can be captured here
