@@ -5,11 +5,23 @@ const Promise = require("bluebird");
 const _ = require("lodash");
 
 module.exports = (details) => {
+
     details.collectionShema.statics.getAll = () => {
         return new Promise((resolve, reject) => {
             let _query = {};
     
-            COLLECTION.find(_query)
+            COLLECTION.find(_query).sort({createdAt: 'desc'})
+                .exec((err, docs) => {
+                  err ? reject(err)
+                      : resolve(docs);
+                });
+        });
+    };
+
+    details.collectionShema.statics.filterWith = (filterCriteria) => {
+        return new Promise((resolve, reject) => {
+    
+            COLLECTION.find(filterCriteria)
                 .exec((err, docs) => {
                   err ? reject(err)
                       : resolve(docs);
@@ -17,6 +29,31 @@ module.exports = (details) => {
         });
     };
     
+    details.collectionShema.statics.getLimited = () => {
+        return new Promise((resolve, reject) => {
+            let _query = {};
+    
+            COLLECTION.find(_query).sort({createdAt: 'desc'}).limit(process.env.FEEDS_LIMIT || 5)
+                .exec((err, docs) => {
+                  err ? reject(err)
+                      : resolve(docs);
+                });
+        });
+    };
+
+    details.collectionShema.statics.filterDocs = (filterObject) => {
+        return new Promise((resolve, reject) => {
+            let _query = {};
+    
+            COLLECTION.find(_query).limit(process.env.FEEDS_LIMIT)
+                .exec((err, docs) => {
+                  err ? reject(err)
+                      : resolve(docs);
+                });
+        });
+    };
+    
+
     details.collectionShema.statics.getById = (id) => {
         return new Promise((resolve, reject) => {
             if (!id) {
@@ -59,8 +96,37 @@ module.exports = (details) => {
                 });
         });
     }
-    
-    const COLLECTION =  mongoose.model(details.collectionName, details.collectionShema);       
 
+
+    details.collectionShema.statics.findWithDetails = (details) => {
+        return new Promise((resolve, reject) => {
+    
+            let _query = details;
+            
+            COLLECTION.find(_query)
+                .exec((err, docs) => {
+                    err ? reject(err)
+                        : resolve(docs);
+                });
+
+        });
+    }
+    
+    details.collectionShema.statics.fetchAndUpdate = (id, details) => {
+        return new Promise((resolve, reject) => {
+
+            delete details._id;
+            
+            COLLECTION.findByIdAndUpdate(id, details)
+                .exec((err, docs) => {
+                    err ? reject(err)
+                        : resolve(docs);
+                });
+
+        });
+    }
+
+    const COLLECTION =  mongoose.model(details.collectionName, details.collectionShema);       
+    
     return COLLECTION;
 }

@@ -20,58 +20,21 @@ class Server {
 
 }
 
-const DummyController = require('./services/dummy-service.js');
+const UserController = require('./controllers/user-controller.js');
+const PostController = require('./controllers/post-controller.js');
+const CommentController = require('./controllers/comment-controller.js');
 
 const userDisconnected = () => {
     console.log("user Disconnected");
 };
 
 const onUserConnected = socket => {
-
-    socket.on("fetch-items", function (userDetails) {
-
-        // User details can be captured here
-        DummyController.getAll()
-        .then(docs => {
-            socket.emit("sending-items", docs);
-        })
-        .catch(err => {
-            socket.emit("sending-items", null);
-        });      
-        
-    });
+    
+    UserController(socket);
+    PostController(socket);
 
     socket.on('disconnect', userDisconnected);
 
-    socket.on('create-entry', function (details) {
-        
-        DummyController.create(details)
-        .then((doc) => {
-            socket.emit('entry-created', doc);            
-        })
-        .catch(err => {
-            socket.emit('entry-created', null);
-        });
-    });
-
-    socket.on('delete-item', function (details) {
-        
-        DummyController.delete(details)
-        .then((doc) => {
-            
-            DummyController.getAll()
-            .then(docs => {
-                console.log(docs)
-                socket.emit('entry-deleted', docs);                    
-            })
-            .catch(err => {
-                socket.emit('entry-deleted', null);
-            });  
-        })
-        .catch(err => {
-            socket.emit('entry-deleted', null);
-        });
-    });
 };
 
 
