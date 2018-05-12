@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const PrettyError = require('pretty-error');
-const DB = require('./server/model/db.js');
+const DB = require('./server/db-connect.js');
 
 const pe = new PrettyError;
 
