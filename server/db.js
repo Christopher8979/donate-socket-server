@@ -17,6 +17,17 @@ module.exports = (details) => {
                 });
         });
     };
+
+    details.collectionShema.statics.filterWith = (filterCriteria) => {
+        return new Promise((resolve, reject) => {
+    
+            COLLECTION.find(filterCriteria)
+                .exec((err, docs) => {
+                  err ? reject(err)
+                      : resolve(docs);
+                });
+        });
+    };
     
     details.collectionShema.statics.getLimited = () => {
         return new Promise((resolve, reject) => {

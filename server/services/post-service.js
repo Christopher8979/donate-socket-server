@@ -29,5 +29,14 @@ module.exports = class PostController {
     static getLimitedResults() {
         return collectionUtils.getLimited();
     }
+
+    static cumulativeFilter(filterDetails) {
+        if (filterDetails._id) {
+            return collectionUtils.getById(filterDetails._id);
+        } else {
+            filterDetails.title = "/.*" + (filterDetails.title ? filterDetails.title : "") + ".*/";
+            return collectionUtils.filterWith(filterDetails);
+        }
+    }
     
 }

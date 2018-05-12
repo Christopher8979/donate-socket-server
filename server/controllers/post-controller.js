@@ -58,7 +58,25 @@ module.exports = (socket) => {
 
     socket.on('search-one-post', (postID) => {
         postCollection
-        .getById(postID)
+        .cumulativeFilter({_id:postID})
+        .then((response) => {
+            console.log(response);
+            socket.emit('post-in-detail', {
+                success: true,
+                data: response
+            });
+        })
+        .catch((err) => {
+            socket.emit('post-in-detail', {
+                success: false,
+                data: err
+            });
+        });
+    });
+
+    socket.on('filter-search', (filter) => {
+        postCollection
+        .cumulativeFilter(filter)
         .then((response) => {
             console.log(response);
             socket.emit('post-in-detail', {
