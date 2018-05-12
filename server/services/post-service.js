@@ -21,4 +21,8 @@ module.exports = class PostController {
     static delete(_id) {
         return collectionUtils.deleteDoc(_id);
     }
+
+    static fetchAndUpdate(details) {
+        return collectionUtils.fetchAndUpdate(details._id, details);
+    }
 }

@@ -5,6 +5,9 @@ const Promise = require("bluebird");
 const _ = require("lodash");
 
 module.exports = (details) => {
+
+    const COLLECTION =  mongoose.model(details.collectionName, details.collectionShema);       
+    
     details.collectionShema.statics.getAll = () => {
         return new Promise((resolve, reject) => {
             let _query = {};
@@ -75,7 +78,19 @@ module.exports = (details) => {
         });
     }
     
-    const COLLECTION =  mongoose.model(details.collectionName, details.collectionShema);       
+    details.collectionShema.statics.fetchAndUpdate = (id, details) => {
+        return new Promise((resolve, reject) => {
+
+            delete details._id;
+            
+            COLLECTION.findByIdAndUpdate(id, details)
+                .exec((err, docs) => {
+                    err ? reject(err)
+                        : resolve(docs);
+                });
+
+        });
+    }
 
     return COLLECTION;
 }

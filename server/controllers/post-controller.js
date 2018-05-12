@@ -21,6 +21,24 @@ module.exports = (socket) => {
         });
     });
 
+    socket.on('update-post', (postDetails) => {
+
+        postCollection
+        .fetchAndUpdate(postDetails)
+        .then((response) => {
+            socket.emit('new-post-done', {
+                success: true,
+                data: response
+            });
+        })
+        .catch((err) => {
+            socket.emit('new-post-done', {
+                success: false,
+                data: err
+            });
+        });
+    });
+
     socket.on('login-attempt', (userDetails) => {
 
         postCollection.findWithDetails(userDetails)
