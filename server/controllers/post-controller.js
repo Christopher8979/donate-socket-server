@@ -56,17 +56,18 @@ module.exports = (socket) => {
         });
     });
 
-    socket.on('search-post', (filterData) => {
+    socket.on('search-one-post', (postID) => {
         postCollection
-        .getLimitedResults()
+        .getById(postID)
         .then((response) => {
-            socket.emit('post-results-fetched', {
+            console.log(response);
+            socket.emit('post-in-detail', {
                 success: true,
                 data: response
             });
         })
         .catch((err) => {
-            socket.emit('post-results-fetched', {
+            socket.emit('post-in-detail', {
                 success: false,
                 data: err
             });
