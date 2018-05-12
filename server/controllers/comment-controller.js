@@ -1,55 +1,55 @@
 
-const postCollection = require('../services/post-service');
+const commentCollection = require('../services/comment-service');
 
 module.exports = (socket) => {
 
-    socket.on('create-post', (postDetails) => {
+    socket.on('create-comment', (commentDetails) => {
 
-        postCollection
-        .create(postDetails)
+        commentCollection
+        .create(commentDetails)
         .then((response) => {
-            socket.emit('new-post-done', {
+            socket.emit('new-comment-added', {
                 success: true,
                 data: response
             });
         })
         .catch((err) => {
-            socket.emit('new-post-done', {
+            socket.emit('new-comment-added', {
                 success: false,
                 data: err
             });
         });
     });
 
-    socket.on('update-post', (postDetails) => {
+    socket.on('update-comment', (commentDetails) => {
 
-        postCollection
-        .fetchAndUpdate(postDetails)
+        commentCollection
+        .fetchAndUpdate(commentDetails)
         .then((response) => {
-            socket.emit('post-updated', {
+            socket.emit('comment-updated', {
                 success: true,
                 data: response
             });
         })
         .catch((err) => {
-            socket.emit('post-updated', {
+            socket.emit('comment-updated', {
                 success: false,
                 data: err
             });
         });
     });
 
-    socket.on('fetch-latest-posts', () => {
-        postCollection
-        .getLimitedResults()
+    socket.on('fetch-all-comments', () => {
+        commentCollection
+        .getAll()
         .then((response) => {
-            socket.emit('post-results-fetched', {
+            socket.emit('comments-fetched', {
                 success: true,
                 data: response
             });
         })
         .catch((err) => {
-            socket.emit('post-results-fetched', {
+            socket.emit('comments-fetched', {
                 success: false,
                 data: err
             });

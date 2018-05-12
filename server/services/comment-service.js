@@ -9,11 +9,7 @@ module.exports = class CommentController {
     static getAll() {
         return collectionUtils.getAll();
     }
-    
-    static getById(id) {
-        return collectionUtils.getById(id);
-    }
-    
+
     static create(_body) {
         return collectionUtils.newDoc(_body);
     }

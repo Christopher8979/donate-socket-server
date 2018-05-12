@@ -10,7 +10,7 @@ module.exports = (details) => {
         return new Promise((resolve, reject) => {
             let _query = {};
     
-            COLLECTION.find(_query)
+            COLLECTION.find(_query).sort({createdAt: 'desc'})
                 .exec((err, docs) => {
                   err ? reject(err)
                       : resolve(docs);
