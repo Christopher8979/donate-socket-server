@@ -26,33 +26,33 @@ module.exports = (socket) => {
         postCollection
         .fetchAndUpdate(postDetails)
         .then((response) => {
-            socket.emit('new-post-done', {
+            socket.emit('post-updated', {
                 success: true,
                 data: response
             });
         })
         .catch((err) => {
-            socket.emit('new-post-done', {
+            socket.emit('post-updated', {
                 success: false,
                 data: err
             });
         });
     });
 
-    socket.on('login-attempt', (userDetails) => {
+    // socket.on('login-attempt', (userDetails) => {
 
-        postCollection.findWithDetails(userDetails)
-        .then((response) => {
-            socket.emit('login-attempt-response', {
-                success: true,
-                data: response
-            });
-        })
-        .catch((err) => {
-            socket.emit('login-attempt-response', {
-                success: false,
-                data: err
-            });
-        });
-    });
+    //     postCollection.findWithDetails(userDetails)
+    //     .then((response) => {
+    //         socket.emit('login-attempt-response', {
+    //             success: true,
+    //             data: response
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         socket.emit('login-attempt-response', {
+    //             success: false,
+    //             data: err
+    //         });
+    //     });
+    // });
 };
