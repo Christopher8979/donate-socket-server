@@ -2,8 +2,8 @@
 
 const dbService = require("../db.js");
 const collectionUtils = dbService({
-    "collectionShema": require("../model/user"), "collectionName": "user"
-});
+    "collectionShema": require("../model/user"), "collectionName": "User"
+}); 
 
 module.exports = class UserController {
     static getAll() {

@@ -2,10 +2,10 @@
 
 const dbService = require("../db.js");
 const collectionUtils = dbService({
-    "collectionShema": require("../model/post"), "collectionName": "Post"
+    "collectionShema": require("../model/donation-history"), "collectionName": "DonationHistory"
 });
 
-module.exports = class PostController {
+module.exports = class DonationHistoryController {
     static getAll() {
         return collectionUtils.getAll();
     }

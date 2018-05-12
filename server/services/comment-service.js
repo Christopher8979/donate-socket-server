@@ -2,10 +2,10 @@
 
 const dbService = require("../db.js");
 const collectionUtils = dbService({
-    "collectionShema": require("../model/post"), "collectionName": "Post"
+    "collectionShema": require("../model/comment"), "collectionName": "Comment"
 });
 
-module.exports = class PostController {
+module.exports = class CommentController {
     static getAll() {
         return collectionUtils.getAll();
     }
