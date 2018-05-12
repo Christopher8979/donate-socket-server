@@ -79,13 +79,13 @@ module.exports = (socket) => {
         .cumulativeFilter(filter)
         .then((response) => {
             console.log(response);
-            socket.emit('post-in-detail', {
+            socket.emit('post-results-fetched', {
                 success: true,
                 data: response
             });
         })
         .catch((err) => {
-            socket.emit('post-in-detail', {
+            socket.emit('post-results-fetched', {
                 success: false,
                 data: err
             });
