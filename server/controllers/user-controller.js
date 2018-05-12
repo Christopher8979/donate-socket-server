@@ -7,15 +7,15 @@ module.exports = (socket) => {
         userCollection
         .create(userDetails)
         .then((response) => {
-            socket.emit('user-redistered', {
+            socket.emit('user-registered', {
                 success: true,
-                response: response
+                data: response
             });
         })
         .catch((err) => {
-            socket.emit('user-redistered', {
+            socket.emit('user-registered', {
                 success: false,
-                response: err
+                data: err
             });
         });
     });
