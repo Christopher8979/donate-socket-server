@@ -21,7 +21,7 @@ class Server {
 }
 
 const UserController = require('./controllers/user-controller.js');
-const PostController = require('./controllers/user-controller.js');
+const PostController = require('./controllers/post-controller.js');
 
 const userDisconnected = () => {
     console.log("user Disconnected");
