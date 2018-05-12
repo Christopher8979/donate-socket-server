@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const dbConst = require('../../config/config.js')
+const dbConst = require('../config/config.js')
 
 module.exports = class DBConfig {
     static init() {
