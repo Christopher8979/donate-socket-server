@@ -18,6 +18,31 @@ module.exports = (details) => {
         });
     };
     
+    details.collectionShema.statics.getLimited = () => {
+        return new Promise((resolve, reject) => {
+            let _query = {};
+    
+            COLLECTION.find(_query).sort({createdAt: 'desc'}).limit(process.env.FEEDS_LIMIT || 5)
+                .exec((err, docs) => {
+                  err ? reject(err)
+                      : resolve(docs);
+                });
+        });
+    };
+
+    details.collectionShema.statics.filterDocs = (filterObject) => {
+        return new Promise((resolve, reject) => {
+            let _query = {};
+    
+            COLLECTION.find(_query).limit(process.env.FEEDS_LIMIT)
+                .exec((err, docs) => {
+                  err ? reject(err)
+                      : resolve(docs);
+                });
+        });
+    };
+    
+
     details.collectionShema.statics.getById = (id) => {
         return new Promise((resolve, reject) => {
             if (!id) {

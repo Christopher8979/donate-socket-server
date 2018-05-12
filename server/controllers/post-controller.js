@@ -39,6 +39,23 @@ module.exports = (socket) => {
         });
     });
 
+    socket.on('fetch-latest-posts', () => {
+        postCollection
+        .getLimitedResults()
+        .then((response) => {
+            socket.emit('post-results-fetched', {
+                success: true,
+                data: response
+            });
+        })
+        .catch((err) => {
+            socket.emit('post-results-fetched', {
+                success: false,
+                data: err
+            });
+        });
+    });
+
     // socket.on('login-attempt', (userDetails) => {
 
     //     postCollection.findWithDetails(userDetails)

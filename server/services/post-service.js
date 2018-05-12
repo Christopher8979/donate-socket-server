@@ -25,4 +25,9 @@ module.exports = class PostController {
     static fetchAndUpdate(details) {
         return collectionUtils.fetchAndUpdate(details._id, details);
     }
+
+    static getLimitedResults() {
+        return collectionUtils.getLimited();
+    }
+    
 }
