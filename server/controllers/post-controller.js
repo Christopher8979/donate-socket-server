@@ -3,7 +3,7 @@ const postCollection = require('../services/post-service');
 
 module.exports = (socket) => {
 
-    socket.on('createPost', (postDetails) => {
+    socket.on('create-post', (postDetails) => {
 
         postCollection
         .create(postDetails)
