@@ -26,13 +26,13 @@ module.exports = (socket) => {
         .then((response) => {
             socket.emit('login-attempt-response', {
                 success: true,
-                response: response
+                data: response
             });
         })
         .catch((err) => {
             socket.emit('login-attempt-response', {
                 success: false,
-                response: err
+                data: err
             });
         });
     });
