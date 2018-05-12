@@ -14,13 +14,15 @@ module.exports = class UserController {
         return collectionUtils.getById(id);
     }
     
-    static create(details) {
-        let _body = details;
+    static create(_body) {
         return collectionUtils.newDoc(_body);
     }
     
-    static delete(id) {
-        let _id = id;        
+    static delete(_id) {
         return collectionUtils.deleteDoc(_id);
+    }
+
+    static findWithDetails(details) {
+        return collectionUtils.findWithDetails(details);
     }
 }

@@ -59,6 +59,21 @@ module.exports = (details) => {
                 });
         });
     }
+
+
+    details.collectionShema.statics.findWithDetails = (details) => {
+        return new Promise((resolve, reject) => {
+    
+            let _query = details;
+            
+            COLLECTION.find(_query)
+                .exec((err, docs) => {
+                    err ? reject(err)
+                        : resolve(docs);
+                });
+
+        });
+    }
     
     const COLLECTION =  mongoose.model(details.collectionName, details.collectionShema);       
 
