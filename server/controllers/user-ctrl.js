@@ -3,20 +3,22 @@ const userCollection = require('../services/user-service');
 module.exports = (socket) => {
     socket.on('register-user', (userDetails) => {
 
-        userCollection
-        .insert(userDetails)
-        .then((response) => {
-            socket.emit('user-registered', {
-                success: true,
-                data: response
-            });
+        userCollection.insert(userDetails, (err, response) => {
+
+            console.log('getting response');
+            console.log(err, response);
+            if (err) {
+                socket.emit('user-registered', {
+                    success: false,
+                    data: err
+                });
+            } else {
+                socket.emit('user-registered', {
+                    success: true,
+                    data: response
+                });
+            }
         })
-        .catch((err) => {
-            socket.emit('user-registered', {
-                success: false,
-                data: err
-            });
-        });
     });
 
     socket.on('login-attempt', (userDetails) => {
