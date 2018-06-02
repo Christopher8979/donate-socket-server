@@ -48,8 +48,8 @@ var BaseCtrl = function (model) {
         });
     };
     // Update by id
-    this.update = function (req, cb) {
-        _this.model.findOneAndUpdate({ _id: req.params.id }, req.body, function (err) {
+    this.update = function (details, cb) {
+        _this.model.findOneAndUpdate({ _id: details._id }, details, function (err) {
             if (err) {
                 return _this.respondErrorMessage(cb, err);
             }
