@@ -20,6 +20,8 @@ class Server {
 
 }
 
+const userCtrl  = require('./controllers/user-ctrl');
+
 const userDisconnected = () => {
     console.log("user Disconnected");
 };
