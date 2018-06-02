@@ -65,6 +65,20 @@ var BaseCtrl = function (model) {
             cb(null, {});
         });
     };
+    // Get only few details
+    this.getDetails = function (details, cb) {
+        _this.model
+        .find({_id: details.id})
+        .select(details.fields.join(' '))
+        .exec(function (err, requiredDetails) {
+            if (err) {
+                return _this.respondErrorMessage(cb, err);
+            }
+            cb(null, requiredDetails[0]);
+        });
+
+    };
+
     return this;
 };
 

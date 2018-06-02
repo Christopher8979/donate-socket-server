@@ -1,6 +1,8 @@
 var BaseCtrl = require('./base-service');
 var postModel = require('../model/post');
 var auth = require('../auth');
+var commentService = require('./comment-service');
+
 
 var postCtrl = new BaseCtrl(postModel);
 
@@ -11,25 +13,22 @@ postCtrl.get = function(id, cb) {
         .findOne({ _id: id })
         .populate('createdBy', 'name email')
         .lean()
-        .exec(function (err, thread) {
+        .exec(function (err, post) {
         if (err) {
             return cb(err, null);
         }
-        // Message.find({ thread: thread._id })
-        //     .populate('createdBy lastUpdatedBy', 'name email')
-        //     .lean()
-        //     .exec(function (err, messages) {
-        //     if (err) {
-        //         return this.respondErrorMessage(res, err);
-        //     }
-        //     thread.messages = messages;
-        //     return res.status(200).json(thread);
-        // });
 
-        thread.comments = [];
-        thread.donationHistory = [];
+        commentService.fetchPostComments(post._id, (err, comments) => {
+            if (err) {
+                return cb(err, null);
+            }
 
-        return cb(null, thread);
+            post.comments = comments;
+            post.donationHistory = [];
+    
+            return cb(null, post);
+            
+        });
     });
 };
 

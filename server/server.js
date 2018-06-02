@@ -22,6 +22,7 @@ class Server {
 
 const userCtrl  = require('./controllers/user-ctrl');
 const postCtrl  = require('./controllers/post-ctrl');
+const commentCtrl  = require('./controllers/comment-ctrl');
 
 const userDisconnected = () => {
     console.log("user Disconnected");
@@ -30,6 +31,7 @@ const userDisconnected = () => {
 const onUserConnected = socket => {
     userCtrl(socket);
     postCtrl(socket);
+    commentCtrl(socket);
 
 
     socket.on('disconnect', userDisconnected);

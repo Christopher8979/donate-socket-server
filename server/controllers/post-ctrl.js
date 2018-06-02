@@ -1,20 +1,5 @@
 const postCollection = require('../services/post-service');
 
-// userCollection.insert(userDetails, (err, response) => {
-//     if (err) {
-//         socket.emit('user-registered', {
-//             success: false,
-//             data: err
-//         });
-//     } else {
-//         socket.emit('user-registered', {
-//             success: true,
-//             data: response
-//         });
-//     }
-// });
-
-
 module.exports = (socket) => {
 
     socket.on('create-post', (postDetails) => {
