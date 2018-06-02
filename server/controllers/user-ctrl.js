@@ -5,8 +5,6 @@ module.exports = (socket) => {
 
         userCollection.insert(userDetails, (err, response) => {
 
-            console.log('getting response');
-            console.log(err, response);
             if (err) {
                 socket.emit('user-registered', {
                     success: false,
@@ -18,23 +16,24 @@ module.exports = (socket) => {
                     data: response
                 });
             }
-        })
+        });
     });
 
     socket.on('login-attempt', (userDetails) => {
 
-        userCollection.findWithDetails(userDetails)
-        .then((response) => {
-            socket.emit('login-attempt-response', {
-                success: true,
-                data: response
-            });
-        })
-        .catch((err) => {
-            socket.emit('login-attempt-response', {
-                success: false,
-                data: err
-            });
+        userCollection.login(userDetails, (err, response) => {
+
+            if (err) {
+                socket.emit('login-attempt-response', {
+                    success: false,
+                    data: err
+                });
+            } else {
+                socket.emit('login-attempt-response', {
+                    success: true,
+                    data: response
+                });
+            }
         });
     });
 };
