@@ -1,5 +1,7 @@
 
-var BaseCtrl = function () {
+var BaseCtrl = function (model) {
+    this.model = model;
+
     var _this = this;
     this.respondErrorMessage = function (cb, err) {
         return cb(err, null);

@@ -27,7 +27,8 @@ const userDisconnected = () => {
 };
 
 const onUserConnected = socket => {
-    console.log('socket created');
+    userCtrl(socket);
+
 
     socket.on('disconnect', userDisconnected);
 
