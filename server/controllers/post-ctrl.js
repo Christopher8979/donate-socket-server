@@ -85,21 +85,20 @@ module.exports = (socket) => {
         });
     });
 
-    socket.on('filter-search', (filter) => {
-        postCollection
-        .cumulativeFilter(filter)
-        .then((response) => {
-            console.log(response);
-            socket.emit('post-results-fetched', {
-                success: true,
-                data: response
-            });
-        })
-        .catch((err) => {
-            socket.emit('post-results-fetched', {
-                success: false,
-                data: err
-            });
+    socket.on('filter-search', () => {
+
+        postCollection.cumulativeFilter(filter, (err, response) => {
+            if (err) {
+                socket.emit('post-results-fetched', {
+                    success: false,
+                    data: err
+                });
+            } else {
+                socket.emit('post-results-fetched', {
+                    success: true,
+                    data: response
+                });
+            }
         });
     });
 
