@@ -71,7 +71,7 @@ commentCtrl.delete = function (details, cb) {
 // Method to get comments on a post.
 commentCtrl.fetchPostComments = function (postID, cb) {
     this.model.find({ post: postID })
-        .populate('postedBy', 'name email')
+        .populate('postedBy', 'name emailID')
         .sort({createdAt: 'desc'})
         .lean()
         .exec(function (err, docs) {

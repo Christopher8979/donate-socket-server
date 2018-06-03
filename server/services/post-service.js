@@ -2,20 +2,26 @@ var BaseCtrl = require('./base-service');
 var postModel = require('../model/post');
 var auth = require('../auth');
 var commentService = require('./comment-service');
+var donationService = require('./donation-service');
 
 
 var postCtrl = new BaseCtrl(postModel);
 
 
 postCtrl.get = function(id, cb) {
-    this
-        .model
-        .findOne({ _id: id })
-        .populate('createdBy', 'name email')
-        .lean()
-        .exec(function (err, post) {
+    this.model
+    .findOne({ _id: id })
+    .populate('postedBy', 'name emailID')
+    .lean()
+    .exec(function (err, post) {
         if (err) {
             return cb(err, null);
+        }
+
+        if (post === null) {
+            return cb({
+                'reason': 'post not found'
+            }, null);
         }
 
         commentService.fetchPostComments(post._id, (err, comments) => {
@@ -24,9 +30,19 @@ postCtrl.get = function(id, cb) {
             }
 
             post.comments = comments;
-            post.donationHistory = [];
-    
-            return cb(null, post);
+
+            donationService.fetchPostDonations(post._id, (err, donations) => {
+                if (err) {
+                    return cb(err, null);
+                }
+
+                post.donationHistory = donations;
+        
+                post.lastUpdateAt = new Date(post.lastUpdateAt);
+                post.createdAt = new Date(post.createdAt);
+                return cb(null, post);
+                
+            });
             
         });
     });
@@ -34,7 +50,7 @@ postCtrl.get = function(id, cb) {
 
 postCtrl.getLimitedResults = function (cb) {
     this.model.find({})
-        .populate('createdBy', 'name email')
+        .populate('createdBy', 'name emailID')
         .sort({createdAt: 'desc'})
         .limit(process.env.FEEDS_LIMIT || 5)
         .lean()
@@ -50,7 +66,7 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
     filterDetails.title = "/.*" + (filterDetails.title ? filterDetails.title : "") + ".*/";
     
     this.model.find(filterDetails)
-        .populate('createdBy', 'name email')
+        .populate('createdBy', 'name emailID')
         .sort({createdAt: 'desc'})
         .lean()
         .exec(function (err, docs) {
@@ -60,5 +76,8 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
         cb(null, docs);
     });
 };
+
+
+// Deletion of post is pending!
 
 module.exports = postCtrl;
