@@ -93,6 +93,19 @@ postCtrl.userPosts = function (useID, cb) {
         });
 }
 
+postCtrl.getAll = function (cb) {
+    this.model.find({})
+        .populate('postedBy', 'name emailID')
+        .sort({ createdAt: 'desc' })
+        .lean()
+        .exec(function (err, docs) {
+            if (err) {
+                return cb(err, null);
+            }
+            cb(null, docs);
+        });
+}
+
 
 // Deletion of post is pending!
 

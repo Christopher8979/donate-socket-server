@@ -36,6 +36,23 @@ module.exports = (socket) => {
         });
     });
 
+    socket.on('fetch-all-posts', () => {
+
+        postCollection.getAll((err, response) => {
+            if (err) {
+                socket.emit('post-results-fetcheded', {
+                    success: false,
+                    data: err
+                });
+            } else {
+                socket.emit('post-results-fetched', {
+                    success: true,
+                    data: response
+                });
+            }
+        });
+    });
+
     socket.on('search-one-post', (postID) => {
 
         postCollection.get(postID, (err, response) => {
