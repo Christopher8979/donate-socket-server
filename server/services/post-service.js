@@ -79,6 +79,20 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
         });
 };
 
+postCtrl.userPosts = function (useID, cb) {
+    this.model.find({ postedBy: useID })
+        .populate('postedBy', 'name emailID')
+        .sort({ createdAt: 'desc' })
+        .lean()
+        .exec(function (err, docs) {
+            if (err) {
+                console.log(err);
+                return cb(err, null);
+            }
+            cb(null, docs);
+        });
+}
+
 
 // Deletion of post is pending!
 

@@ -87,4 +87,21 @@ module.exports = (socket) => {
         });
     });
 
+    socket.on('my-posts', (userID) => {
+
+        postCollection.userPosts(userID, (err, response) => {
+            if (err) {
+                socket.emit('post-results-fetched', {
+                    success: false,
+                    data: err
+                });
+            } else {
+                socket.emit('post-results-fetched', {
+                    success: true,
+                    data: response
+                });
+            }
+        });
+    });
+
 };
