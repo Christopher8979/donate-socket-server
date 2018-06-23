@@ -38,9 +38,18 @@ postCtrl.get = function (id, cb) {
 
                     post.donationHistory = donations;
 
-                    post.lastUpdateAt = new Date(post.lastUpdateAt);
-                    post.createdAt = new Date(post.createdAt);
-                    return cb(null, post);
+                    ImageService.fetchPostImages(post._id, (err, images) => {
+                        if (err) {
+                            return cb(err, null);
+                        }
+
+                        post.images = images;
+
+                        post.lastUpdateAt = new Date(post.lastUpdateAt);
+                        post.createdAt = new Date(post.createdAt);
+                        return cb(null, post);
+
+                    });
 
                 });
 
@@ -75,6 +84,7 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
                 console.log(err);
                 return cb(err, null);
             }
+
             cb(null, docs);
         });
 };
@@ -113,12 +123,6 @@ postCtrl.insert = function (details, cb) {
         .save()
         .then(function (savedPost) {
             async.each(details.images, (image, errCB) => {
-
-                console.log({
-                    postID: savedPost._id.toString(),
-                    reference: image.toString()
-                });
-
 
                 ImageService.insert({
                     postID: savedPost._id.toString(),
