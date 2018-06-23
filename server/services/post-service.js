@@ -1,3 +1,4 @@
+var async = require('async');
 var BaseCtrl = require('./base-service');
 var postModel = require('../model/post');
 var commentService = require('./comment-service');
@@ -110,13 +111,33 @@ postCtrl.insert = function (details, cb) {
 
     this.model(details)
         .save()
-        .then(function (item) {
-            console.log('item');
-            console.log(item);
-            console.log('\n\n');
-            console.log('details');
-            console.log(details);
-            cb(null, item);
+        .then(function (savedPost) {
+            async.each(details.images, (image, errCB) => {
+
+                console.log({
+                    postID: savedPost._id.toString(),
+                    reference: image.toString()
+                });
+
+
+                ImageService.insert({
+                    postID: savedPost._id.toString(),
+                    reference: image.toString()
+                }, (err, savedImage) => {
+                    if (err) {
+                        console.log(err);
+                        return errCB(err, null);
+                    }
+                    errCB();
+                })
+            }, (err) => {
+                if (err) {
+                    console.log(err);
+                    return cb(err, null);
+                }
+
+                cb(null, savedPost);
+            });
         })
         .catch(function (err) {
             // 11000 is the code for duplicate key error

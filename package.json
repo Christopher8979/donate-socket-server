@@ -15,6 +15,7 @@
     "url": "git+https://github.com/Christopher8979/live-server.git"
   },
   "dependencies": {
+    "async": "^2.6.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",

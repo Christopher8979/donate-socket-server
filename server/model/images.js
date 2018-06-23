@@ -1,11 +1,12 @@
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 
 const userSchema = new mongoose.Schema({
-  postID: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
-  reference: { type: Schema.Types.ObjectId, required: true }
+  postID: { type: Schema.Types.ObjectId, ref: 'Post' },
+  reference: { type: String, required: true }
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('ImageReferrences', userSchema);
 
 module.exports = User;
