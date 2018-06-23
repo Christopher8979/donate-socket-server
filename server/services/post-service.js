@@ -1,9 +1,8 @@
 var BaseCtrl = require('./base-service');
 var postModel = require('../model/post');
-var auth = require('../auth');
 var commentService = require('./comment-service');
 var donationService = require('./donation-service');
-
+var ImageService = require('./image-service');
 
 var postCtrl = new BaseCtrl(postModel);
 
