@@ -50,7 +50,7 @@ postCtrl.get = function (id, cb) {
 
 postCtrl.getLimitedResults = function (cb) {
     this.model.find({})
-        .populate('createdBy', 'name emailID')
+        .populate('postedBy', 'name emailID')
         .sort({ createdAt: 'desc' })
         .limit(parseInt(process.env.FEEDS_LIMIT, 10) || 5)
         .lean()
@@ -63,14 +63,16 @@ postCtrl.getLimitedResults = function (cb) {
 };
 
 postCtrl.cumulativeFilter = function (filterDetails, cb) {
-    filterDetails.title = "/.*" + (filterDetails.title ? filterDetails.title : "") + ".*/";
-
+    // filterDetails.title = "/^.*" + (filterDetails.title ? filterDetails.title : "") + ".*$/";
+    // filterDetails.title = { $search: filterDetails.title }
+    console.log(filterDetails);
     this.model.find(filterDetails)
-        .populate('createdBy', 'name emailID')
+        .populate('postedBy', 'name emailID')
         .sort({ createdAt: 'desc' })
         .lean()
         .exec(function (err, docs) {
             if (err) {
+                console.log(err);
                 return cb(err, null);
             }
             cb(null, docs);

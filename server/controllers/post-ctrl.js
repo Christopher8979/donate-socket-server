@@ -70,7 +70,7 @@ module.exports = (socket) => {
         });
     });
 
-    socket.on('filter-search', () => {
+    socket.on('filter-search', (filter) => {
 
         postCollection.cumulativeFilter(filter, (err, response) => {
             if (err) {
