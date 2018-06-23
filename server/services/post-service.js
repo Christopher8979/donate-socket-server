@@ -107,6 +107,31 @@ postCtrl.getAll = function (cb) {
 }
 
 
+postCtrl.insert = function (details, cb) {
+
+    this.model(details)
+        .save()
+        .then(function (item) {
+            console.log('item');
+            console.log(item);
+            console.log('\n\n');
+            console.log('details');
+            console.log(details);
+            cb(null, item);
+        })
+        .catch(function (err) {
+            // 11000 is the code for duplicate key error
+            if (err && err.code === 11000) {
+                cb({ error: 400 }, null);
+            }
+            if (err) {
+                console.log(err);
+                return cb(err, null);
+            }
+        });
+}
+
+
 // Deletion of post is pending!
 
 module.exports = postCtrl;

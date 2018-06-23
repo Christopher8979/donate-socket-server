@@ -11,10 +11,10 @@ const postSchema = new Schema({
     quantityRequired: { type: Number, required: true, trim: true },
     quantityInHand: { type: Number, required: false, trim: true, default: 0 },
     ageOfProduct: { type: Number, required: true, trim: true },
-    isPostActive: { type: Boolean, required: false, default: true},
+    isPostActive: { type: Boolean, required: false, default: true },
     postedBy: { type: Schema.Types.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now },
-    lastUpdateAt:{type: Date,default: Date.now}
+    lastUpdateAt: { type: Date, default: Date.now }
 });
 
 const Post = mongoose.model('Post', postSchema);
