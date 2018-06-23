@@ -30,7 +30,7 @@ var BaseCtrl = function (model) {
         obj.save(function (err, item) {
             // 11000 is the code for duplicate key error
             if (err && err.code === 11000) {
-                cb({error: 400}, null);
+                cb({ error: 400 }, null);
             }
             if (err) {
                 return _this.respondErrorMessage(cb, err);
@@ -57,8 +57,8 @@ var BaseCtrl = function (model) {
         });
     };
     // Delete by id
-    this.delete = function (req, cb) {
-        _this.model.findOneAndRemove({ _id: req.params.id }, function (err) {
+    this.delete = function (id, cb) {
+        _this.model.findOneAndRemove({ _id: id }, function (err) {
             if (err) {
                 return _this.respondErrorMessage(cb, err);
             }
@@ -68,14 +68,14 @@ var BaseCtrl = function (model) {
     // Get only few details
     this.getDetails = function (details, cb) {
         _this.model
-        .find({_id: details.id})
-        .select(details.fields.join(' '))
-        .exec(function (err, requiredDetails) {
-            if (err) {
-                return _this.respondErrorMessage(cb, err);
-            }
-            cb(null, requiredDetails[0]);
-        });
+            .find({ _id: details.id })
+            .select(details.fields.join(' '))
+            .exec(function (err, requiredDetails) {
+                if (err) {
+                    return _this.respondErrorMessage(cb, err);
+                }
+                cb(null, requiredDetails[0]);
+            });
 
     };
 

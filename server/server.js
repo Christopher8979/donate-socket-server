@@ -20,10 +20,11 @@ class Server {
 
 }
 
-const userCtrl  = require('./controllers/user-ctrl');
-const postCtrl  = require('./controllers/post-ctrl');
-const commentCtrl  = require('./controllers/comment-ctrl');
-const donationCtrl  = require('./controllers/donation-ctrl');
+const userCtrl = require('./controllers/user-ctrl');
+const postCtrl = require('./controllers/post-ctrl');
+const imageCtrl = require('./controllers/image-ctrl');
+const commentCtrl = require('./controllers/comment-ctrl');
+const donationCtrl = require('./controllers/donation-ctrl');
 
 const userDisconnected = () => {
     console.log("user Disconnected");
@@ -32,6 +33,7 @@ const userDisconnected = () => {
 const onUserConnected = socket => {
     userCtrl(socket);
     postCtrl(socket);
+    imageCtrl(socket);
     commentCtrl(socket);
     donationCtrl(socket);
 
