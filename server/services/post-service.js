@@ -91,7 +91,7 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
                     }
 
                     singleResult.images = images;
-                    asyncCallBack(null, post);
+                    asyncCallBack(null);
                 });
             }, (err) => {
                 if (err) {
@@ -121,7 +121,7 @@ postCtrl.userPosts = function (useID, cb) {
                     }
 
                     singleResult.images = images;
-                    asyncCallBack(null, post);
+                    asyncCallBack(null);
                 });
             }, (err) => {
                 if (err) {
@@ -150,7 +150,7 @@ postCtrl.getAll = function (cb) {
                     }
 
                     singleResult.images = images;
-                    asyncCallBack(null, post);
+                    asyncCallBack(null);
                 });
             }, (err) => {
                 if (err) {
