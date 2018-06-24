@@ -72,9 +72,8 @@ postCtrl.getLimitedResults = function (cb) {
 };
 
 postCtrl.cumulativeFilter = function (filterDetails, cb) {
-    // filterDetails.title = "/^.*" + (filterDetails.title ? filterDetails.title : "") + ".*$/";
-    // filterDetails.title = { $search: filterDetails.title }
-    console.log(filterDetails);
+    filterDetails.title = new RegExp((filterDetails.title ? filterDetails.title : ""), "i");
+
     this.model.find(filterDetails)
         .populate('postedBy', 'name emailID')
         .sort({ createdAt: 'desc' })
@@ -263,7 +262,5 @@ postCtrl.delete = function (postID, cb) {
         }
     });
 };
-
-// Deletion of post is pending!
 
 module.exports = postCtrl;
