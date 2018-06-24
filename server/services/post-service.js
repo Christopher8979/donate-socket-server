@@ -84,7 +84,22 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
                 return cb(err, null);
             }
 
-            cb(null, docs);
+            async.each(docs, (singleResult, asyncCallBack) => {
+                ImageService.fetchPostImages(singleResult._id, (err, images) => {
+                    if (err) {
+                        return asyncCallBack(err, null);
+                    }
+
+                    singleResult.images = images;
+                    asyncCallBack(null, post);
+                });
+            }, (err) => {
+                if (err) {
+                    return cb(err, null);
+                }
+
+                cb(null, docs);
+            });
         });
 };
 
@@ -98,7 +113,23 @@ postCtrl.userPosts = function (useID, cb) {
                 console.log(err);
                 return cb(err, null);
             }
-            cb(null, docs);
+
+            async.each(docs, (singleResult, asyncCallBack) => {
+                ImageService.fetchPostImages(singleResult._id, (err, images) => {
+                    if (err) {
+                        return asyncCallBack(err, null);
+                    }
+
+                    singleResult.images = images;
+                    asyncCallBack(null, post);
+                });
+            }, (err) => {
+                if (err) {
+                    return cb(err, null);
+                }
+
+                cb(null, docs);
+            });
         });
 }
 
@@ -111,7 +142,23 @@ postCtrl.getAll = function (cb) {
             if (err) {
                 return cb(err, null);
             }
-            cb(null, docs);
+
+            async.each(docs, (singleResult, asyncCallBack) => {
+                ImageService.fetchPostImages(singleResult._id, (err, images) => {
+                    if (err) {
+                        return asyncCallBack(err, null);
+                    }
+
+                    singleResult.images = images;
+                    asyncCallBack(null, post);
+                });
+            }, (err) => {
+                if (err) {
+                    return cb(err, null);
+                }
+
+                cb(null, docs);
+            });
         });
 }
 
