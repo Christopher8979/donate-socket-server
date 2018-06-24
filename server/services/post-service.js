@@ -155,6 +155,114 @@ postCtrl.insert = function (details, cb) {
         });
 }
 
+postCtrl.delete = function (postID, cb) {
+
+    const modelRef = this;
+
+    this.getDetails({
+        id: postID,
+        fields: ['isPostActive', 'quantityInHand', 'quantityRequired']
+    }, (err, details) => {
+        if (err) {
+            console.log(err);
+            return cb(err, null);
+        }
+
+        if (!details.isPostActive || (!details.quantityInHand)) {
+
+            // Get and delete image references
+            ImageService.fetchPostImages(postID, (err, relatedImages) => {
+                if (err) {
+                    return cb(err, null);
+                }
+
+                async.each(relatedImages, (refImage, imageRefferenceCallBack) => {
+                    ImageService.delete(refImage._id, (err, resp) => {
+                        if (err) {
+                            return imageRefferenceCallBack(err, null);
+                        }
+
+                        imageRefferenceCallBack();
+                    });
+                }, (err) => {
+                    if (err) {
+                        return cb(err, null);
+                    }
+                    console.log('all Image references Deleted');
+
+                    // Get and delete donations
+                    donationService.fetchPostDonations(postID, (err, relatedDonations) => {
+                        if (err) {
+                            return cb(err, null);
+                        }
+
+                        async.each(relatedDonations, (refDonations, donationReferenceCallBack) => {
+                            donationService.delete(refDonations._id, (err) => {
+                                if (err) {
+                                    return donationReferenceCallBack(err, null);
+                                }
+
+                                donationReferenceCallBack();
+                            });
+                        }, (err) => {
+                            if (err) {
+                                return cb(err, null);
+                            }
+
+                            console.log('all related donations are deleted');
+
+                            // Get and delete all the comments
+                            commentService.fetchPostComments(postID, (err, relatedComments) => {
+                                if (err) {
+                                    return cb(err, null);
+                                }
+
+                                async.each(relatedComments, (refComments, commentRelatedCallBack) => {
+
+                                    commentService.delete({
+                                        postID,
+                                        id: refComments._id
+                                    }, (err, resp) => {
+                                        if (err) {
+                                            return commentRelatedCallBack(err, null);
+                                        }
+
+                                        commentRelatedCallBack();
+                                    })
+                                }, (err) => {
+                                    if (err) {
+                                        return cb(err, null);
+                                    }
+
+                                    console.log('all related comments are deleted');
+                                    console.log('Finally delete post');
+
+                                    modelRef
+                                        .model
+                                        .findOneAndRemove({ _id: postID }, function (err) {
+                                            if (err) {
+                                                return cb(err, null);
+                                            }
+
+                                            cb(null, {
+                                                'message': 'post deleted successfully'
+                                            });
+                                        });
+                                });
+                            });
+                        });
+                    });
+                });
+
+            });
+
+        } else {
+            return cb({
+                message: 'There has been a donation on this post already. Please wait till all the donations are completed'
+            }, null);
+        }
+    });
+};
 
 // Deletion of post is pending!
 

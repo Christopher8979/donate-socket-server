@@ -121,4 +121,20 @@ module.exports = (socket) => {
         });
     });
 
+    socket.on('delete-post', (postID) => {
+        postCollection.delete(postID, (err, response) => {
+            if (err) {
+                socket.emit('post-deleted', {
+                    success: false,
+                    data: err
+                });
+            } else {
+                socket.emit('post-deleted', {
+                    success: true,
+                    data: response
+                });
+            }
+        })
+    });
+
 };
