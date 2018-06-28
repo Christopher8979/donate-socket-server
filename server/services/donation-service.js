@@ -9,14 +9,14 @@ donationCtrl.insert = function (donation, cb) {
 
     postService = require('./post-service');
     postService.getDetails({
-        id : donation.post,
+        id: donation.post,
         fields: ['donationCount', 'quantityInHand', 'quantityRequired', 'isPostActive']
     }, (err, details) => {
         if (err) {
             return cb(err, null);
         }
 
-        if (!details.isPostActive){
+        if (!details.isPostActive) {
             return cb({
                 "reason": "Post is inactive or closed",
                 "solution": "Refresh post to get updated post details",
@@ -39,12 +39,12 @@ donationCtrl.insert = function (donation, cb) {
             }
 
             var fieldsToUpdate = {
-                _id : donation.post,
+                _id: donation.post,
                 donationCount: details.donationCount + 1,
                 quantityInHand: details.quantityInHand + donation.quantityOffered,
             }
 
-            if(details.quantityInHand + donation.quantityOffered === details.quantityRequired) {
+            if (details.quantityInHand + donation.quantityOffered === details.quantityRequired) {
                 fieldsToUpdate.isPostActive = false
             }
 
@@ -64,15 +64,15 @@ donationCtrl.insert = function (donation, cb) {
 // Method to get comments on a post.
 donationCtrl.fetchPostDonations = function (postID, cb) {
     this.model.find({ post: postID })
-        .populate('donationBy', 'name emailID')
-        .sort({createdAt: 'desc'})
+        .populate('donationBy', 'name emailID type')
+        .sort({ createdAt: 'desc' })
         .lean()
         .exec(function (err, docs) {
-        if (err) {
-            return cb(err, null);
-        }
-        cb(null, docs);
-    });
+            if (err) {
+                return cb(err, null);
+            }
+            cb(null, docs);
+        });
 };
 
 module.exports = donationCtrl;

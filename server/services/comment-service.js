@@ -15,7 +15,7 @@ commentCtrl.insert = function (comment, cb) {
 
         postService = require('./post-service');
         postService.getDetails({
-            id : comment.post,
+            id: comment.post,
             fields: ['commentCount']
         }, (err, details) => {
             if (err) {
@@ -23,7 +23,7 @@ commentCtrl.insert = function (comment, cb) {
             }
 
             postService.update({
-                _id : comment.post,
+                _id: comment.post,
                 commentCount: details.commentCount + 1
             }, (err, resp) => {
                 if (err) {
@@ -43,7 +43,7 @@ commentCtrl.delete = function (details, cb) {
     // Decrement first then delete because once child reference is gone then parent will not be accessable
     postService = require('./post-service');
     postService.getDetails({
-        id : details.postID,
+        id: details.postID,
         fields: ['commentCount']
     }, (err, resp) => {
         if (err) {
@@ -51,13 +51,13 @@ commentCtrl.delete = function (details, cb) {
         }
 
         postService.update({
-            _id : details.postID,
+            _id: details.postID,
             commentCount: resp.commentCount - 1
         }, (err, resp) => {
             if (err) {
                 return cb(err, null);
             }
-            
+
             _this.model.findOneAndRemove({ _id: details.id }, function (err) {
                 if (err) {
                     return cb(err, null);
@@ -71,15 +71,15 @@ commentCtrl.delete = function (details, cb) {
 // Method to get comments on a post.
 commentCtrl.fetchPostComments = function (postID, cb) {
     this.model.find({ post: postID })
-        .populate('postedBy', 'name emailID')
-        .sort({createdAt: 'desc'})
+        .populate('postedBy', 'name emailID type')
+        .sort({ createdAt: 'desc' })
         .lean()
         .exec(function (err, docs) {
-        if (err) {
-            return cb(err, null);
-        }
-        cb(null, docs);
-    });
+            if (err) {
+                return cb(err, null);
+            }
+            cb(null, docs);
+        });
 };
 
 module.exports = commentCtrl;

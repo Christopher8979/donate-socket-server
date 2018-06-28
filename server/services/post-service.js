@@ -11,7 +11,7 @@ var postCtrl = new BaseCtrl(postModel);
 postCtrl.get = function (id, cb) {
     this.model
         .findOne({ _id: id })
-        .populate('postedBy', 'name emailID')
+        .populate('postedBy', 'name emailID type')
         .lean()
         .exec(function (err, post) {
             if (err) {
@@ -59,7 +59,7 @@ postCtrl.get = function (id, cb) {
 
 postCtrl.getLimitedResults = function (cb) {
     this.model.find({})
-        .populate('postedBy', 'name emailID')
+        .populate('postedBy', 'name emailID type')
         .sort({ createdAt: 'desc' })
         .limit(parseInt(process.env.FEEDS_LIMIT, 10) || 5)
         .lean()
@@ -75,7 +75,7 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
     filterDetails.title = new RegExp((filterDetails.title ? filterDetails.title : ""), "i");
 
     this.model.find(filterDetails)
-        .populate('postedBy', 'name emailID')
+        .populate('postedBy', 'name emailID type')
         .sort({ createdAt: 'desc' })
         .lean()
         .exec(function (err, docs) {
@@ -105,7 +105,7 @@ postCtrl.cumulativeFilter = function (filterDetails, cb) {
 
 postCtrl.userPosts = function (useID, cb) {
     this.model.find({ postedBy: useID })
-        .populate('postedBy', 'name emailID')
+        .populate('postedBy', 'name emailID type')
         .sort({ createdAt: 'desc' })
         .lean()
         .exec(function (err, docs) {
@@ -135,7 +135,7 @@ postCtrl.userPosts = function (useID, cb) {
 
 postCtrl.getAll = function (cb) {
     this.model.find({})
-        .populate('postedBy', 'name emailID')
+        .populate('postedBy', 'name emailID type')
         .sort({ createdAt: 'desc' })
         .lean()
         .exec(function (err, docs) {
