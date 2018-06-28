@@ -74,12 +74,12 @@ module.exports = (socket) => {
 
         postCollection.getLimitedResults((err, response) => {
             if (err) {
-                socket.emit('post-results-fetched', {
+                socket.emit('feed-fetched', {
                     success: false,
                     data: err
                 });
             } else {
-                socket.emit('post-results-fetched', {
+                socket.emit('feed-fetched', {
                     success: true,
                     data: response
                 });
