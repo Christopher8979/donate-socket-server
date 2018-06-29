@@ -4,6 +4,22 @@ module.exports = (socket) => {
 
     socket.on('create-post', (postDetails) => {
 
+        if (postDetails && (
+            !postDetails.description ||
+            !postDetails.quantityRequired ||
+            !postDetails.ageOfProduct ||
+            !postDetails.category ||
+            !postDetails.postedBy ||
+            !postDetails.title
+        )) {
+            return socket.emit('new-post-done', {
+                success: false,
+                data: {
+                    "message": 'Required fields not present. Check your payload'
+                }
+            });
+        }
+
         postCollection.insert(postDetails, (err, response) => {
             if (err) {
                 socket.emit('new-post-done', {
@@ -20,6 +36,17 @@ module.exports = (socket) => {
     });
 
     socket.on('update-post', (postDetails) => {
+
+        if (postDetails && (
+            !postDetails._id
+        )) {
+            return socket.emit('post-updated', {
+                success: false,
+                data: {
+                    "message": 'Required fields not present. Check your payload'
+                }
+            });
+        }
 
         postCollection.update(postDetails, (err, response) => {
             if (err) {
@@ -54,6 +81,15 @@ module.exports = (socket) => {
     });
 
     socket.on('search-one-post', (postID) => {
+
+        if (!postID) {
+            return socket.emit('post-in-detail', {
+                success: false,
+                data: {
+                    "message": 'Send Post ID get post in detail'
+                }
+            });
+        }
 
         postCollection.get(postID, (err, response) => {
             if (err) {
@@ -106,6 +142,15 @@ module.exports = (socket) => {
 
     socket.on('my-posts', (userID) => {
 
+        if (!userID) {
+            return socket.emit('post-results-fetched', {
+                success: false,
+                data: {
+                    "message": 'Send User ID get user related post'
+                }
+            });
+        }
+
         postCollection.userPosts(userID, (err, response) => {
             if (err) {
                 socket.emit('post-results-fetched', {
@@ -122,6 +167,14 @@ module.exports = (socket) => {
     });
 
     socket.on('delete-post', (postID) => {
+        if (!postID) {
+            return socket.emit('post-deleted', {
+                success: false,
+                data: {
+                    "message": 'Send Post ID to delete the post'
+                }
+            });
+        }
         postCollection.delete(postID, (err, response) => {
             if (err) {
                 socket.emit('post-deleted', {

@@ -281,7 +281,6 @@ postCtrl.delete = function (postID, cb) {
                                     }
 
                                     console.log('all related comments are deleted');
-                                    console.log('Finally delete post');
 
                                     modelRef
                                         .model
@@ -290,6 +289,7 @@ postCtrl.delete = function (postID, cb) {
                                                 return cb(err, null);
                                             }
 
+                                            console.log('Finally delete påost');
                                             cb(null, {
                                                 'message': 'post deleted successfully'
                                             });
