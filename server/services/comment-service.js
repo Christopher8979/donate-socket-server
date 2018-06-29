@@ -22,6 +22,10 @@ commentCtrl.insert = function (comment, cb) {
                 return cb(err, null);
             }
 
+            if (!details) {
+                return cb({ message: 'post ID is not valid' }, null);
+            }
+
             postService.update({
                 _id: comment.post,
                 commentCount: details.commentCount + 1
