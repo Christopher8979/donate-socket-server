@@ -16,6 +16,10 @@ donationCtrl.insert = function (donation, cb) {
             return cb(err, null);
         }
 
+        if (!details) {
+            return cb({ message: 'Post ID is not valid or empty' }, null);
+        }
+
         if (!details.isPostActive) {
             return cb({
                 "reason": "Post is inactive or closed",
@@ -63,6 +67,11 @@ donationCtrl.insert = function (donation, cb) {
 
 // Method to get comments on a post.
 donationCtrl.fetchPostDonations = function (postID, cb) {
+    if (!postID) {
+        return cb({
+            "message": 'Send Post ID to fetch all donations'
+        }, null);
+    }
     this.model.find({ post: postID })
         .populate('donationBy', 'name emailID type')
         .sort({ createdAt: 'desc' })
