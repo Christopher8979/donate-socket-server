@@ -31,6 +31,14 @@ const userDisconnected = () => {
 };
 
 const onUserConnected = socket => {
+    // middleware for all logs
+    socket.use((package, next) => {
+        if (process.env.ENABLE_LOGS) {
+            console.log(package);
+        }
+        next();
+    });
+
     userCtrl(socket);
     postCtrl(socket);
     imageCtrl(socket);
