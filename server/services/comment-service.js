@@ -54,6 +54,12 @@ commentCtrl.delete = function (details, cb) {
             return cb(err, null);
         }
 
+        if (!resp) {
+            return cb({
+                message: 'Post with this ID is not present.'
+            }, null);
+        }
+
         postService.update({
             _id: details.postID,
             commentCount: resp.commentCount - 1
