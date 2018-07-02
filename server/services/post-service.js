@@ -214,6 +214,12 @@ postCtrl.delete = function (postID, cb) {
             return cb(err, null);
         }
 
+        if (!resp) {
+            return cb({
+                message: 'Post with this ID is not present.'
+            }, null);
+        }
+
         if (!details.isPostActive || (!details.quantityInHand)) {
 
             // Get and delete image references
