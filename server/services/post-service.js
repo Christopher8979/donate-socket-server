@@ -214,7 +214,7 @@ postCtrl.delete = function (postID, cb) {
             return cb(err, null);
         }
 
-        if (!resp) {
+        if (!details) {
             return cb({
                 message: 'Post with this ID is not present.'
             }, null);
