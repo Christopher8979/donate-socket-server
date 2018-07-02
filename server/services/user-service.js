@@ -1,28 +1,31 @@
-"use-strict";
+var BaseCtrl = require('./base-service');
+var userModel = require('../model/user');
+var auth = require('../auth');
 
-const dbService = require("../db.js");
-const collectionUtils = dbService({
-    "collectionShema": require("../model/user"), "collectionName": "User"
-}); 
+var userCtrl = new BaseCtrl(userModel);
 
-module.exports = class UserController {
-    static getAll() {
-        return collectionUtils.getAll();
-    }
-    
-    static getById(id) {
-        return collectionUtils.getById(id);
-    }
-    
-    static create(_body) {
-        return collectionUtils.newDoc(_body);
-    }
-    
-    static delete(_id) {
-        return collectionUtils.deleteDoc(_id);
-    }
 
-    static findWithDetails(details) {
-        return collectionUtils.findWithDetails(details);
-    }
-}
+userCtrl.login = function (details, cb) {
+    this.model.findOne({ emailID: details.emailID }, function (err, user) {
+        if (!user) {
+            return cb({errpr:401}, null);
+        }
+
+        user.comparePassword(details.password, function (error, isMatch) {
+            if (!isMatch) {
+                return cb({error:403}, null);
+            }
+
+            var token = auth.createJWToken({
+                user: user
+            });
+
+            cb(null, {
+                token: token,
+                user: user.toJSON()
+            });
+        });
+    });
+};
+
+module.exports = userCtrl;

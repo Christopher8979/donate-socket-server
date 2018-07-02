@@ -20,18 +20,31 @@ class Server {
 
 }
 
-const UserController = require('./controllers/user-controller.js');
-const PostController = require('./controllers/post-controller.js');
-const CommentController = require('./controllers/comment-controller.js');
+const userCtrl = require('./controllers/user-ctrl');
+const postCtrl = require('./controllers/post-ctrl');
+const imageCtrl = require('./controllers/image-ctrl');
+const commentCtrl = require('./controllers/comment-ctrl');
+const donationCtrl = require('./controllers/donation-ctrl');
 
 const userDisconnected = () => {
     console.log("user Disconnected");
 };
 
 const onUserConnected = socket => {
-    
-    UserController(socket);
-    PostController(socket);
+    // middleware for all logs
+    socket.use((package, next) => {
+        if (process.env.ENABLE_LOGS) {
+            console.log(package);
+        }
+        next();
+    });
+
+    userCtrl(socket);
+    postCtrl(socket);
+    imageCtrl(socket);
+    commentCtrl(socket);
+    donationCtrl(socket);
+
 
     socket.on('disconnect', userDisconnected);
 
